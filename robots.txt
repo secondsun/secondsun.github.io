@@ -1,2 +1,2 @@
 User-agent: *
-Disallow: /.well-known/assetlunks.json
+Disallow: /.well-known/assetlinks.json
