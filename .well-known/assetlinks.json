@@ -15,4 +15,16 @@
       "sha256_cert_fingerprints":
       ["4C:D7:E4:04:B8:54:04:A0:5F:50:35:38:CF:B6:89:3D:35:CE:54:C7:01:8E:ED:78:7A:50:9B:4A:2E:A8:BE:B4"]
     }
-  }]
+      },
+{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.secondsun.myapplication",
+      "sha256_cert_fingerprints":
+      ["B0:59:CC:12:4B:34:2C:0B:2E:2C:88:E3:0E:03:BE:E6:D0:CF:AD:67:FD:F6:32:92:43:64:FD:6D:67:1C:A4:0E"]
+    }
+      }
+
+
+]
