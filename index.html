@@ -1,5 +1,97 @@
+<!DOCTYPE html>
 <html>
-  <body>
+
+<head>
+    <meta charSet="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#006e00" />
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_-hU95mPZC25dx93slGgNKpL-cSFzMNE",
+            authDomain: "oauth-demo-mrsummers.firebaseapp.com",
+            projectId: "oauth-demo-mrsummers",
+            storageBucket: "oauth-demo-mrsummers.appspot.com",
+            messagingSenderId: "810044610881",
+            appId: "1:810044610881:web:e30ea4ba64570c1418a9c0",
+            measurementId: "G-GE1L60E9SK"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+
+
+        auth.onAuthStateChanged(function (user) {
+            if (user) {
+                if (auth.currentUser) {
+                    document.getElementById("userInfo").innerHTML = auth.currentUser.displayName
+                } else {
+                    document.getElementById("userInfo").innerHTML = " Please Login"
+                }
+            } else {
+                if (auth.currentUser) {
+                    document.getElementById("userInfo").innerHTML = auth.currentUser.displayName
+                } else {
+                    document.getElementById("userInfo").innerHTML = " Please Login"
+                }
+            }
+        });
+        window.setup = function () {
+
+            console.log(auth.currentUser)
+            if (auth.currentUser) {
+                document.getElementById("userInfo").innerHTML = auth.currentUser.displayName
+            } else {
+                document.getElementById("userInfo").innerHTML = " Please Login"
+            }
+        };
+
+        window.login = function () {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    // The signed-in user info.
+                    const user = result.user;
+                    // IdP data available using getAdditionalUserInfo(result)
+                    // ...
+                    document.getElementById("userInfo").innerHTML = auth.currentUser.displayName
+
+                    console.log(user)
+                }).catch((error) => {
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // The email of the user's account used.
+                    const email = error.customData.email;
+                    // The AuthCredential type that was used.
+                    const credential = GoogleAuthProvider.credentialFromError(error);
+                    console.log(error)
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <button onclick="{window.login()}" title="Login">Login</button>
+    <span id="userInfo" />
+    <br/>
     <a href="https://secondsun.github.io/specials">View Specials</a><br/>
-  </body>
+</body>
 </html>
