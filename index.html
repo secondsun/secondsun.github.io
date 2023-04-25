@@ -57,7 +57,7 @@
             if (auth.currentUser) {
                 document.getElementById("userInfo").innerHTML = auth.currentUser.displayName
             } else {
-                document.getElementById("userInfo").innerHTML = " Please Login"
+                document.getElementById("userInfo").innerHTML = "Please Login"
             }
         };
 
@@ -89,9 +89,12 @@
 </head>
 
 <body>
-    <button onclick="{window.login()}" title="Login">Login</button>
-    <span id="userInfo" />
+  <a href="https://secondsun.github.io/specials">View Specials</a><br/>
+  <a href="https://secondsun.github.io/nal_specials">View Specials (NAL)</a><br/>
+  <br />  
+  <button onclick="{window.login()}" title="Login">Login</button>
+    <span id="userInfo" ></span>
     <br/>
-    <a href="https://secondsun.github.io/specials">View Specials</a><br/>
+    
 </body>
 </html>
