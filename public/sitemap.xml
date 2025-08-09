@@ -2,23 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://secondsun.github.io/</loc>
-    <lastmod>2020-01-03T00:00:00+00:00</lastmod>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2025-07-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://secondsun.github.io/hugo/</loc>
+    <loc>http://localhost:1313/blog/</loc>
+    <lastmod>2025-07-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://secondsun.github.io/bear/</loc>
+    <loc>http://localhost:1313/about/</loc>
   </url><url>
-    <loc>https://secondsun.github.io/blog/</loc>
-    <lastmod>2020-01-03T00:00:00+00:00</lastmod>
+    <loc>http://localhost:1313/chip8-ide-with-compose-overview/</loc>
+    <lastmod>2025-07-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://secondsun.github.io/blog/markdown/</loc>
-    <lastmod>2020-01-03T00:00:00+00:00</lastmod>
+    <loc>http://localhost:1313/blog/compose/</loc>
+    <lastmod>2025-07-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://secondsun.github.io/markdown-syntax-guide/</loc>
-    <lastmod>2020-01-03T00:00:00+00:00</lastmod>
+    <loc>http://localhost:1313/blog/emulation/</loc>
+    <lastmod>2025-07-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://secondsun.github.io/blog/syntax/</loc>
-    <lastmod>2020-01-03T00:00:00+00:00</lastmod>
+    <loc>http://localhost:1313/blog/kotlin/</loc>
+    <lastmod>2025-07-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/blog/programming/</loc>
+    <lastmod>2025-07-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/blog/markdown/</loc>
+  </url><url>
+    <loc>http://localhost:1313/blog/syntax/</loc>
   </url>
 </urlset>

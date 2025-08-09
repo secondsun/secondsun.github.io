@@ -4,24 +4,20 @@ menu = "main"
 weight = 1
 +++
 
-# A match made in heaven
+# Welcome to my website/portfolio/blog/etc.
 
-There is a website obesity crisis. Bloated websites full of scripts, ads, and trackers are slowing your readers down every time they try to read your well-crafted content.
+Hi all, I'm Summers Pittman and this is my web space. Here you will find whatever I feel like posting, and it will mostly be updates on my hobby project, pictures of my friends and dogs, and the occasional recipe or brain dump. 
 
-Hugo Bear Blog is all you need to build a fantastic and optimized site or blog. It works perfectly on **any** viewing device. All you need to focus on is writing good content.
+I consider this to be my personal social media site for my anti-social self.
 
-[Go to the original bear blog](https://bearblog.dev/).
+# Important links
 
----
+ My [GitHub](https://github.com/secondsun) where I post most of my work. 
 
-What happens when you combine the worlds' fastest, most lightweight static site generator with a design theme built to provide you with free, no-nonsense, super-fast blogging capabilities?
+ My [YouTube](https://www.youtube.com/summerspittman) where I post demos.
 
-**Use this theme, and find out!**
+ My [LinkedIn](https://www.linkedin.com/in/summers-pittman-30724a44/) and [resume](/pdfs/Hoyt_Summers_Pittman_Resume.pdf) if you want to hire me.
 
-Made with 💟 by [Jan Raasch](https://www.janraasch.com).
+# Contact
 
----
-
-Simply publish content online, grow an audience, and keep your pages tiny, fast, and **optimized for search engines**.
-
-Each page is ~5kb, and you can **host your blog yourself**.
+Feel free to reach out to me via email : secondsun at gmail dot com

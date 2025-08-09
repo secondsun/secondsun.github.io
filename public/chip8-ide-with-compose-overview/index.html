@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="shortcut icon" href="http://localhost:1313/images/favicon.png" />
+<title>Chip8 IDE with Compose - Overview | Summers Pittman&#39;s Devsite</title>
+<meta name="title" content="Chip8 IDE with Compose - Overview" />
+<meta name="description" content="I&#39;m building an IDE for Chip 8 using Compose Multiplatform." />
+<meta name="keywords" content="emulation,kotlin,compose,programming," />
+
+
+<meta property="og:url" content="http://localhost:1313/chip8-ide-with-compose-overview/">
+  <meta property="og:site_name" content="Summers Pittman&#39;s Devsite">
+  <meta property="og:title" content="Chip8 IDE with Compose - Overview">
+  <meta property="og:description" content="I&#39;m building an IDE for Chip 8 using Compose Multiplatform.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="blog">
+    <meta property="article:published_time" content="2025-07-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-09T00:00:00+00:00">
+    <meta property="article:tag" content="Emulation">
+    <meta property="article:tag" content="Kotlin">
+    <meta property="article:tag" content="Compose">
+    <meta property="article:tag" content="Programming">
+    <meta property="og:image" content="http://localhost:1313/images/share.png">
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/images/share.png">
+  <meta name="twitter:title" content="Chip8 IDE with Compose - Overview">
+  <meta name="twitter:description" content="I&#39;m building an IDE for Chip 8 using Compose Multiplatform.">
+
+
+
+
+  <meta itemprop="name" content="Chip8 IDE with Compose - Overview">
+  <meta itemprop="description" content="I&#39;m building an IDE for Chip 8 using Compose Multiplatform.">
+  <meta itemprop="datePublished" content="2025-07-09T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2025-07-09T00:00:00+00:00">
+  <meta itemprop="wordCount" content="377">
+  <meta itemprop="image" content="http://localhost:1313/images/share.png">
+  <meta itemprop="keywords" content="Emulation,Kotlin,Compose,Programming">
+<meta name="referrer" content="no-referrer-when-downgrade" />
+
+  <style>
+  :root {
+    --width: 720px;
+    --font-main: Verdana, sans-serif;
+    --font-secondary: Verdana, sans-serif;
+    --font-scale: 1em;
+    --background-color: #fff;
+    --heading-color: #222;
+    --text-color: #444;
+    --link-color: #3273dc;
+    --visited-color: #8b6fcb;
+    --code-background-color: #f2f2f2;
+    --code-color: #222;
+    --blockquote-color: #222;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background-color: #01242e;
+      --heading-color: #eee;
+      --text-color: #ddd;
+      --link-color: #8cc2dd;
+      --visited-color: #8b6fcb;
+      --code-background-color: #000;
+      --code-color: #ddd;
+      --blockquote-color: #ccc;
+    }
+  }
+
+  body {
+    font-family: var(--font-secondary);
+    font-size: var(--font-scale);
+    margin: auto;
+    padding: 20px;
+    max-width: var(--width);
+    text-align: left;
+    background-color: var(--background-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    color: var(--text-color);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-main);
+    color: var(--heading-color);
+  }
+
+  a {
+    color: var(--link-color);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  nav a {
+    margin-right: 8px;
+  }
+
+  strong,
+  b {
+    color: var(--heading-color);
+  }
+
+  button {
+    margin: 0;
+    cursor: pointer;
+  }
+
+  time {
+    font-family: monospace;
+    font-style: normal;
+    font-size: 15px;
+  }
+
+  main {
+    line-height: 1.6;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px dashed;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  code {
+    font-family: monospace;
+    padding: 2px;
+    background-color: var(--code-background-color);
+    color: var(--code-color);
+    border-radius: 3px;
+  }
+
+  blockquote {
+    border-left: 1px solid #999;
+    color: var(--code-color);
+    padding-left: 20px;
+    font-style: italic;
+  }
+
+  footer {
+    padding: 25px 0;
+    text-align: center;
+  }
+
+  .title:hover {
+    text-decoration: none;
+  }
+
+  .title h1 {
+    font-size: 1.5em;
+  }
+
+  .inline {
+    width: auto !important;
+  }
+
+  .highlight,
+  .code {
+    padding: 1px 15px;
+    background-color: var(--code-background-color);
+    color: var(--code-color);
+    border-radius: 3px;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    overflow-x: auto;
+  }
+
+   
+  ul.blog-posts {
+    list-style-type: none;
+    padding: unset;
+  }
+
+  ul.blog-posts li {
+    display: flex;
+  }
+
+  ul.blog-posts li span {
+    flex: 0 0 130px;
+  }
+
+  ul.blog-posts li a:visited {
+    color: var(--visited-color);
+  }
+
+</style>
+
+</head>
+
+<body>
+  <header><a href="/" class="title">
+  <h2>Summers Pittman&#39;s Devsite</h2>
+</a>
+<nav>
+<a href="/">Home</a>
+
+<a href="/blog/">Blog</a>
+
+<a href="/about/">Acknowledgments</a>
+
+</nav>
+</header>
+  <main>
+
+<h1>Chip8 IDE with Compose - Overview</h1>
+<p>
+  <i>
+    <time datetime='2025-07-09'>
+      09 Jul, 2025
+    </time>
+  </i>
+</p>
+
+<content>
+  <p>Video games were a large part of how I became interested in computing. The industry started in the 70s and expanded to include computer games as well as console gaming. By the late 90s when I was a teenager, these two worlds overlapped due to console emulation. Thanks to a 56k modem and a small amount of skill, I was introduced to the world of ROMs, Romhacks, Nesticle, Snes9x, and more. While these tools let me play so many pirated copies of games I couldn&rsquo;t afford on a child&rsquo;s salary, they also included tools that hinted at how they were written and how the consoles worked. Unfortunately, my skills at the time left me with the understanding that emulation was more &ldquo;magic&rdquo; than &ldquo;advanced technology&rdquo;.</p>
+<p>Even after college, I still didn&rsquo;t have a great grasp on how emulators worked. I understood the fundamentals from an academic sense, and eventually I discovered Chip8. Chip8 is an interpreted  instruction set developed by Joseph Weisbecker for the COSMAC VIP in the mid 70s. It is a very simple &ldquo;machine&rdquo; that has become a de facto &ldquo;hello world&rdquo; project for writing emulators. I wrote a Chip8 <a href="https://github.com/secondsun/chip8">emulator in Java</a> in 2016 and turned the project into a series of lessons for developers to use to start building their own emulator using Test Driven Development practices.</p>
+<p>In mid-2025, I was between jobs, giving me time to revisit the project. I had always meant to add more features to the emulator and implement community extensions like SuperChip, MegaChip, and XO-Chip. I found the <a href="https://johnearnest.github.io/Octo/">Octo</a> project while researching these updates. It is a web-based IDE, dev tool, emulator, etc. for chip8 development. This inspired me to not just to add some features to my emulator, but start a similar project. Thus I started writing <a href="https://github.com/secondsun/nachos">Nachos</a></p>
+<p>Nachos is a Desktop IDE written using Compose Multiplatform.  Eventually I plan on supporting Android and iOS tablets with a full set of features and integration. Currently I&rsquo;ve integrated a theme system, the Monaco Editor, created a syntax highlighting theme, and ported my emulator from Java to Kotlin. Right now I&rsquo;m working on implementing an Octo assembler and will share details of that later.</p>
+
+
+<div style="display: flex; justify-content: space-around; align-items: flex-start; gap: 1rem;">
+
+  <figure style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+    <a href="./nachos-lite.png">
+        <img src="./nachos-lite.png" alt="Nachos light mode" style="max-width:100%; height:auto; display:block;">
+    </a>
+    <figcaption>Nachos light mode</figcaption>
+  </figure>
+
+  <figure style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+    <a href="./nachos-dark.png">
+        <img src="./nachos-dark.png" alt="Nachos dark mode" style="max-width:100%; height:auto; display:block;">
+    </a>
+    <figcaption>Nachos dark mode</figcaption>
+  </figure>
+
+</div>
+
+<h1 id="citations">Citations</h1>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/CHIP-8">Chip-8 on Wikipedia</a></li>
+<li><a href="https://johnearnest.github.io/Octo/">Octo</a></li>
+<li><a href="https://chip-8.github.io/extensions/">CHIP-8 extensions and compatibility</a></li>
+</ul>
+
+</content>
+<p>
+  
+  <a href="http://localhost:1313/blog/emulation/">#Emulation</a>
+  
+  <a href="http://localhost:1313/blog/kotlin/">#Kotlin</a>
+  
+  <a href="http://localhost:1313/blog/compose/">#Compose</a>
+  
+  <a href="http://localhost:1313/blog/programming/">#Programming</a>
+  
+</p>
+
+  </main>
+  <footer>
+</footer>
+
+  
+</body>
+
+</html>
