@@ -1,6 +1,6 @@
 +++
 title = "Chip8 IDE with Compose - A TDD Assembler"
-date = "2025-07-12"
+date = "2025-08-12"
 description = "I'm building an IDE for Chip 8 using Compose Multiplatform."
 tags = [
     "emulation",
