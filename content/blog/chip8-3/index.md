@@ -1,7 +1,7 @@
 +++
-drfat=true
+draft=true
 title = "Syntax checking complete-ish"
-date = "2025-09-9"
+date = "2025-09-09"
 description = "I'm building an IDE for Chip 8 using Compose Multiplatform."
 tags = [
     "emulation",
@@ -127,6 +127,9 @@ Error, tokens size : 3, lines [6]
 	Identifier(name=foo, line=6, column=0) Error "Unexpected end of program" 6:0 Error "Error parsing macro foo" 6:0
 ```
 
-Out output confirms that the first macro expansion fails because strings can't be assigned to a register, and the second expansion fails because the file ends while it is still expecting more tokens.
+Our output confirms that the first macro expansion fails because strings can't be assigned to a register, and the second expansion fails because the file ends while it is still expecting more tokens.
+
+Now that I've talked about what I've done, let's talk about the one file that isn't parsing correctly.  The file is [caveexplorer.8o](https://raw.githubusercontent.com/JohnEarnest/Octo/76f816c8e36891478e1caf5209d85a95d16a38dc/examples/caveexplorer.8o) and the error is on line 222. In this game, there is a label which is defined as an exit. However, exit is a ShuperChip-8 keyword! While this is a hobby project, I have now gotten it to where it will create useful work.
 
 So what's next for Nachos? First, I'm going to integrate the tokenizer and syntax output into the editor. Then I'm going to implement the assembler so text programs can be run. Finally, I will implement debugging tools into the IDE. It is still a lot of work, but it should be educational.
+
