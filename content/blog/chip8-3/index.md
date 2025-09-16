@@ -1,5 +1,4 @@
 +++
-draft=true
 title = "Syntax checking complete-ish"
 date = "2025-09-16"
 description = "Building a Chip-8 IDE in Compose Multiplatform: tokenization, parsing, and real progress."
