@@ -2,32 +2,32 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Kotlin on Summers Pittman&#39;s Devsite</title>
-    <link>http://localhost:1313/blog/kotlin/</link>
+    <link>https://secondsun.github.io/blog/kotlin/</link>
     <description>Recent content in Kotlin on Summers Pittman&#39;s Devsite</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Copyright © 2025, Summers Pittman.</copyright>
     <lastBuildDate>Tue, 16 Sep 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/blog/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://secondsun.github.io/blog/kotlin/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Syntax checking complete-ish</title>
-      <link>http://localhost:1313/syntax-checking-complete-ish/</link>
+      <link>https://secondsun.github.io/syntax-checking-complete-ish/</link>
       <pubDate>Tue, 16 Sep 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/syntax-checking-complete-ish/</guid>
+      <guid>https://secondsun.github.io/syntax-checking-complete-ish/</guid>
       <description>&lt;p&gt;Progress update! Nachos—the Chip‑8 IDE I’m building—now has a feature‑complete tokenizer and syntax checker for the Octo language. It successfully parses every Octo example I’ve thrown at it except one. I’ll share that tiny exception later, but first, a quick tour of how the tokenizer and parser work, what they catch, and what I learned along the way.&lt;/p&gt;&#xA;&lt;h2 id=&#34;tokenization-turning-text-into-tokens&#34;&gt;Tokenization: turning text into tokens&lt;/h2&gt;&#xA;&lt;p&gt;Tokenization is the first step in compilation. The source text becomes a stream of tokens—objects that carry a type (Identifier, Number, Plus), position (line, column), and sometimes a value (identifier name, numeric literal, string contents).&lt;/p&gt;</description>
     </item>
     <item>
       <title>Chip8 IDE with Compose - A TDD Assembler</title>
-      <link>http://localhost:1313/chip8-ide-with-compose-a-tdd-assembler/</link>
+      <link>https://secondsun.github.io/chip8-ide-with-compose-a-tdd-assembler/</link>
       <pubDate>Tue, 12 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/chip8-ide-with-compose-a-tdd-assembler/</guid>
+      <guid>https://secondsun.github.io/chip8-ide-with-compose-a-tdd-assembler/</guid>
       <description>&lt;p&gt;I like Test-Driven Development (TDD) because it helps me overcome the hurdle of starting from no code when beginning a project and focus on breaking down problems and writing code. Reading &lt;strong&gt;Test Driven Development: By Example&lt;/strong&gt; by Kent Beck was a turning point for me. I also practiced with the &lt;strong&gt;Test-First Challenge&lt;/strong&gt; by Bill Wake. Between these two resources, I truly embraced the practice, and it has been immensely helpful. TDD encourages iterative, incremental steps to build a project and provides reassurance that refactors haven&amp;rsquo;t broken working code. TDD feels like a natural fit for writing  my Chip8 IDE &lt;a href=&#34;https://github.com/secondsun/nachos&#34;&gt;Nachos&lt;/a&gt;, at least for the compiler component.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Chip8 IDE with Compose - Overview</title>
-      <link>http://localhost:1313/chip8-ide-with-compose-overview/</link>
+      <link>https://secondsun.github.io/chip8-ide-with-compose-overview/</link>
       <pubDate>Sat, 09 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/chip8-ide-with-compose-overview/</guid>
+      <guid>https://secondsun.github.io/chip8-ide-with-compose-overview/</guid>
       <description>&lt;p&gt;Video games were a large part of how I became interested in computing. The industry started in the 70s and expanded to include computer games as well as console gaming. By the late 90s when I was a teenager, these two worlds overlapped due to console emulation. Thanks to a 56k modem and a small amount of skill, I was introduced to the world of ROMs, Romhacks, Nesticle, Snes9x, and more. While these tools let me play so many pirated copies of games I couldn&amp;rsquo;t afford on a child&amp;rsquo;s salary, they also included tools that hinted at how they were written and how the consoles worked. Unfortunately, my skills at the time left me with the understanding that emulation was more &amp;ldquo;magic&amp;rdquo; than &amp;ldquo;advanced technology&amp;rdquo;.&lt;/p&gt;</description>
     </item>
   </channel>
