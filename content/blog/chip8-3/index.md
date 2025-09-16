@@ -1,8 +1,8 @@
 +++
 draft=true
 title = "Syntax checking complete-ish"
-date = "2025-09-09"
-description = "I'm building an IDE for Chip 8 using Compose Multiplatform."
+date = "2025-09-16"
+description = "Building a Chip-8 IDE in Compose Multiplatform: tokenization, parsing, and real progress."
 tags = [
     "emulation",
     "kotlin",
@@ -11,19 +11,23 @@ tags = [
 ]
 +++
 
-Progress update folks, Nachos' syntax checker and tokenizer for the Octo language compiler is feature complete, and it parses all but one of the files I've thrown at it from the [Octo example](https://github.com/JohnEarnest/Octo/tree/gh-pages/examples). I'll talk about that one exception in a bit, but first I want to talk about how the tokenizer and parser work and lessons learned.
+Progress update! Nachos—the Chip‑8 IDE I’m building—now has a feature‑complete tokenizer and syntax checker for the Octo language. It successfully parses every Octo example I’ve thrown at it except one. I’ll share that tiny exception later, but first, a quick tour of how the tokenizer and parser work, what they catch, and what I learned along the way.
 
-Tokenization is the first step of compilation. During this step, the text source file is turned into basic compnents called tokens. In Nachos, a token includes the line and column the token is found at and the type of the token. Some types of tokens contain more information. The identifier type includes a name, and the number type includes a numeric value, etc.  
+## Tokenization: turning text into tokens
 
-So in practice, tokenization turns this text file
+Tokenization is the first step in compilation. The source text becomes a stream of tokens—objects that carry a type (Identifier, Number, Plus), position (line, column), and sometimes a value (identifier name, numeric literal, string contents).
+
+For example, this Octo snippet:
+
 
 ```octo
-# Our first do nothing function
+
+Our first do-nothing function
 : noop
 return
 ```
+becomes this list of token objects:
 
-Into a list of token objects
 
 ```kotlin
 Colon(line=0, column=0)
@@ -31,105 +35,145 @@ Identifier(name="noop", line=0, column=2)
 Return(line=1, column=0)
 ```
 
-The tokenization process removes comments and whitespace; does some basic typing for identifiers, strings, and numbers; identifies symbols and operators like Plus, Minus, Colon, Shift, Assign, etc.; and identifies keywords like "Return", "Scroll-Left", "Exit", etc.  Tokenization doesn't check for logic errors, typos, missing parameters, uneven braces or parenthesis, etc., it only identifies and lists tokens in a file.  More complex analysis is done during parsing/syntax checking.
+The tokenizer:
+- strips comments and whitespace,
+- recognizes identifiers, numbers, and strings,
+- identifies symbols/operators like \+, \-, \:, \&lt;&lt;, \:=,
+- tags keywords like Return, Scroll\-Left, Exit, etc.
 
-Writing a tokenizer is pretty simple. The tokenizer reads in the sourcefile one character at a time, checks what types of tokens can be started with that character, and reads in more until it can determine a token type. Once the token type is determined, then the rest of the token's string value is consumed until some delimiter is reached. Then the token's string can be turned into a token object when one is complete. In code this looks like this:
+Tokenization does not validate logic or structure. It doesn’t know if you forgot a parameter or mismatched parentheses—it just recognizes the pieces.
+
+### Tokenizer shape (pseudocode)
+
+A tokenizer typically reads characters, decides what token kind could start at that position, consumes the rest, and emits a token:
+
 
 ```kotlin
-//Warning, pseudocode
-//The exact characters you match on depend on your language
-
+// Pseudocode
 while (canContinue()) {
-        val character = getCharacter()
-        if (character == '#') { //Start comment
-            consumeComment()
-        } else if (character.isWhitespace()) { //consume whitespace
-            consumeWhitespace()
-        } else if (character.isLetter()) { // consume identifier
-            consumeIdentifierOrDirectiveOrRegister()
-        } else if (character.isNumber()) {
-            consumeNumber()
-        }
-        //etc
+    val ch = peekChar()
+    when {
+        ch == '#' -> consumeComment()
+        ch.isWhitespace() -> consumeWhitespace()
+        ch.isLetter() || ch == '_' || ch == ':' -> consumeIdentifierOrLabelOrDirective()
+        ch.isDigit() -> consumeNumber() // e.g., 0x.., 0b.., decimal
+        ch == '"' -> consumeStringOrError()
+        else -> consumeSymbolOrError() // operators, punctuation, or unknown
+    }
 }
-
-
 ```
+Some errors can be detected here. For instance, Nachos emits an Error token if it sees an opening quote without a matching closing quote:
 
-There are some errors that can be detected during tokenization. In Nachos I created a "String" token. Strings are surrounded by quotes. When the tokenizer encounters a '"' character, it will begin taking characters until it encounters a closing '"'. If it reaches the end of the line or the end of the file and does not encounter a closing quote, it will return an "Error" type token instead of a "String".
 
-Once the compiler has a string of tokens, it can begin parsing them into more meaningful structures.  Octo is a very simple assembly language.  Arithmitic expressions are grouped by parenthesis and evaluated left to right instead of following an order of operations, there are no user-defined functions, the types are limited to numbers; identifiers; and strings, macros and string functions are very simple, there is no memory management, control functions are limited to jumps; ifs; and loops, registers are manually allocated, etc. These factors lead to the parse tree being very linear, and the parser being very straightforward.
+``kotlin
+// Example outcome
+String(line=10, column=15, value="incomplete
+Error(line=10, column=15, message="Unterminated string literal")
+``
 
-Similar the tokenizaer consuming one character at a time, the parser consumers on token at a time and matches it to the available parse types.  Unlike tokenizaiton, the parser does syntax checking and some evaluations: macros get expanded and verified, identifiers are confirmed to be defined,  braces and parenthesis matching is enforced, expected types are checked, etc. The Nachos parser will return a listed of ParseTokens once parsing is done. These Parse tokens include metadata to be consumed by the assembler and error information if there was a problem.
+## Parsing: building structure and catching mistakes
 
-The following program :
+Once we have tokens, the parser turns them into higher‑level constructs and performs syntax checks. Octo is a small assembly-like language:
+- arithmetic groups with parentheses and evaluates left‑to‑right,
+- types are limited (numbers, identifiers, strings),
+- macros are simple,
+- control flow is jumps/ifs/loops,
+- registers are manual.
+
+This keeps the parse tree fairly linear and the parser straightforward. Unlike tokenization, parsing enforces rules and evaluates context:
+- expands and validates macros,
+- verifies identifiers are defined,
+- matches braces/parentheses,
+- checks expected types and arities,
+- annotates nodes with metadata for the assembler.
+
+The result is a list of ParseTokens. When something goes wrong, the parser emits Error nodes with clear, positional messages—but keeps going to surface as many issues as possible in one pass.
+
+### Example: macro expansion
+
+Input:
+
 
 ```octo
 :macro foo SIZE {
-    v0 := SIZE
-    i := CALLS # CALLS is a built-in parameter for the number of times the macro was called.
+v0 := SIZE
+i := CALLS # CALLS is the number of times this macro has been expanded.
 }
 foo 0x42
 foo 0x42
 ```
+Parsed summary:
 
-becomes the parsed list
 
-```
-Macro, tokens size : 11, lines [1, 2, 3, 4]
-MacroExpand, tokens size : 2, lines [5]
-Assignment, tokens size : 3, lines [2, 5]
-IAssign, tokens size : 3, lines [3, 0]
-MacroExpand, tokens size : 2, lines [6]
-Assignment, tokens size : 3, lines [2, 6]
-IAssign, tokens size : 3, lines [3, 0]
-```
-
-As you can see, after each "MacoExpand" parse token, the macro contents are added to the output. This is because we've expanded the macro and inserted its contents into the parsed list.  We can dig into our output more to verify that the assignments are expanded using the correct parameters from the macro.
-
-```
-MacroExpand, tokens size : 2, lines [5]
-	Identifier(name=foo, line=5, column=12) Number "66" 5:16
-Assignment, tokens size : 3, lines [2, 5]
-	Register(register=v0, line=2, column=16) Assignment(line=2, column=19) Number "66" 5:16
-IAssign, tokens size : 3, lines [3, 0]
-	Register(register=i, line=3, column=16) Assignment(line=3, column=18) Number "1" 0:0
-MacroExpand, tokens size : 2, lines [6]
-	Identifier(name=foo, line=6, column=12) Number "66" 6:16
-Assignment, tokens size : 3, lines [2, 6]
-	Register(register=v0, line=2, column=16) Assignment(line=2, column=19) Number "66" 6:16
-IAssign, tokens size : 3, lines [3, 0]
-	Register(register=i, line=3, column=16) Assignment(line=3, column=18) Number "2" 0:0
-
+```text
+Macro, tokens size: 11, lines [1, 2, 3, 4]
+MacroExpand, tokens size: 2, lines [5]
+Assignment, tokens size: 3, lines [2, 5]
+IAssign, tokens size: 3, lines [3, 0]
+MacroExpand, tokens size: 2, lines [6]
+Assignment, tokens size: 3, lines [2, 6]
+IAssign, tokens size: 3, lines [3, 0]
 ```
 
-If we introduce an error the syntax checker will pick it up.  Let's use a wrong type and forget a parameter.
+Zooming into one expansion to show parameters and substitutions:
+
+
+```text
+MacroExpand, tokens size: 2, lines [5]
+Identifier(name=foo, line=5, column=12) Number "66" 5:16
+Assignment, tokens size: 3, lines [2, 5]
+Register(register=v0, line=2, column=16) Assignment(line=2, column=19) Number "66" 5:16
+IAssign, tokens size: 3, lines [3, 0]
+Register(register=i, line=3, column=16) Assignment(line=3, column=18) Number "1" 0:0
+```
+
+### Example: catching errors (and continuing)
+
+If we pass the wrong type and then forget an argument:
+
 
 ```octo
 :macro foo SIZE {
     v0 := SIZE
-    i := CALLS # CALLS is a built-in parameter for the number of times the macro was called.
+    i := CALLS
 }
 foo "hello"
-foo 
+foo
 ```
 
-Now we have "Error" parse tokens in our output stream. This will signal the assembler to stop, and it will be reported to the user. One feature is that even though there was an error, the assembler still tries to keep going. 
+The parser emits errors but continues analysis so the user gets multiple helpful messages in one run:
 
+
+```text
+MacroExpand, tokens size: 2, lines [5]
+Identifier(name=foo, line=5, column=0) String "hello" 5:4
+Error, tokens size: 4, lines [2, 5]
+Register(register=v0, line=2, column=4) Assignment(line=2, column=7) String "hello" 5:4 Error "Expected Register, Identifier, Number or Key" 5:4
+IAssign, tokens size: 3, lines [3, 0]
+Register(register=i, line=3, column=4) Assignment(line=3, column=6) Number "1" 0:0
+Error, tokens size: 3, lines [6]
+Identifier(name=foo, line=6, column=0) Error "Unexpected end of program" 6:0 Error "Error parsing macro foo" 6:0
 ```
-MacroExpand, tokens size : 2, lines [5]
-	Identifier(name=foo, line=5, column=0) String "hello" 5:4
-Error, tokens size : 4, lines [2, 5]
-	Register(register=v0, line=2, column=4) Assignment(line=2, column=7) String "hello" 5:4 Error "Expected Register, Identifier, Number or Key" 5:4
-IAssign, tokens size : 3, lines [3, 0]
-	Register(register=i, line=3, column=4) Assignment(line=3, column=6) Number "1" 0:0
-Error, tokens size : 3, lines [6]
-	Identifier(name=foo, line=6, column=0) Error "Unexpected end of program" 6:0 Error "Error parsing macro foo" 6:0
-```
 
-Our output confirms that the first macro expansion fails because strings can't be assigned to a register, and the second expansion fails because the file ends while it is still expecting more tokens.
+The first macro expansion fails because a String can’t be assigned to a register. The second fails because the invocation is incomplete.
 
-Now that I've talked about what I've done, let's talk about the one file that isn't parsing correctly.  The file is [caveexplorer.8o](https://raw.githubusercontent.com/JohnEarnest/Octo/76f816c8e36891478e1caf5209d85a95d16a38dc/examples/caveexplorer.8o) and the error is on line 222. In this game, there is a label which is defined as an exit. However, exit is a ShuperChip-8 keyword! While this is a hobby project, I have now gotten it to where it will create useful work.
+## The one exception
 
-So what's next for Nachos? First, I'm going to integrate the tokenizer and syntax output into the editor. Then I'm going to implement the assembler so text programs can be run. Finally, I will implement debugging tools into the IDE. It is still a lot of work, but it should be educational.
+One example file didn’t parse on the first try: [caveexplorer.8o, line 222](https://github.com/JohnEarnest/Octo/blob/76f816c8e36891478e1caf5209d85a95d16a38dc/examples/caveexplorer.8o#L222). A label happens to use the name exit, which is a SuperChip‑8 keyword. It’s a fun edge case—and also a nice sign that the project is far enough along to surface real, actionable issues from real programs. Real code is already producing real feedback.
+
+## Lessons learned
+
+- Fail fast at the character level, fail friendly at the syntax level.
+- Keep tokens rich: line/column and literal values make downstream errors precise.
+- Make macros first‑class in the parser: preserve context for better diagnostics and assembly.
+- Small language, simple parser: lean into Octo’s linearity and constraints.
+- Real code > synthetic tests: example suites flush out keyword/name collisions and corner cases.
+
+## What’s next
+
+- Wire the tokenizer and parser into the editor for live diagnostics.
+- Build the assembler so Octo programs can run end‑to‑end.
+- Add debugging tools in the IDE: state inspection, breakpoints, step/run, and register/memory views.
+
+Still plenty to do, but Nachos is now producing real value—and that’s delicious.
 
